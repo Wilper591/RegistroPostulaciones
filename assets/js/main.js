@@ -44,6 +44,7 @@ openRequest.onsuccess = function () {
       return;
     }
     guardarPostulacion(datos);
+    limpiarFormulario();
   });
 };
 
@@ -126,4 +127,12 @@ const eliminarPostulacion = (id) => {
   request.onerror = function () {
     console.error("Error al eliminar la postulación:", request.error);
   };
+};
+
+const limpiarFormulario = () => {
+  inputCargo.value = "";
+  inputEmpresa.value = "";
+  inputFecha.value = "";
+  inputNota.value = "";
+  return;
 };

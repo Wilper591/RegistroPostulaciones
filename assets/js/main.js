@@ -4,9 +4,9 @@ const inputFecha = document.querySelector("#fecha");
 const inputNota = document.querySelector("#nota");
 const btnGuardar = document.querySelector("#guardar");
 const contenedorPostulaciones = document.querySelector("#postulaciones");
-const btnEliminar = document.querySelectorAll(".btnEliminar");
 
 let db;
+let idEditar = null;
 let openRequest = indexedDB.open("postulaciones", 1);
 
 openRequest.onupgradeneeded = function () {
@@ -24,7 +24,6 @@ openRequest.onsuccess = function () {
   console.log("Base de datos abierta exitosamente");
   obtenerPostulaciones();
 
-  // Manejar la lógica de guardar aquí ya que db está disponible
   btnGuardar.addEventListener("click", (e) => {
     e.preventDefault();
     const datos = {
@@ -43,8 +42,13 @@ openRequest.onsuccess = function () {
       alert("Falta rellenar campos");
       return;
     }
-    guardarPostulacion(datos);
-    limpiarFormulario();
+     if (idEditar) {
+       actualizarPostulacion(idEditar, datos);
+       limpiarFormulario();
+     } else {
+       guardarPostulacion(datos);
+       limpiarFormulario();
+     }
   });
 };
 
@@ -109,10 +113,52 @@ const renderizarPostulaciones = (postulaciones) => {
                     <li class="list-group-item rounded"><strong>Fecha:</strong> ${postulacion.fecha}</li>
                     <li class="list-group-item rounded"><strong>Nota:</strong> ${postulacion.nota}</li>
                     <button class="btn btn-danger my-2" onclick="eliminarPostulacion(${postulacion.id})">Eliminar</button>
+                    <button class="btn btn-secondary my-2" onclick="editarPostulacion(${postulacion.id})">Editar</button>
             `;
     contenedorPostulaciones.appendChild(div);
   });
 };
+
+const editarPostulacion = (id) => {
+  let transaction = db.transaction("postulaciones", "readonly");
+  let store = transaction.objectStore("postulaciones");
+
+  let request = store.get(id);
+
+  request.onsuccess = function () {
+    const postulacion = request.result;
+    inputCargo.value = postulacion.cargo;
+    inputEmpresa.value = postulacion.empresa;
+    inputFecha.value = postulacion.fecha;
+    inputNota.value = postulacion.nota;
+    idEditar = postulacion.id;
+    btnGuardar.textContent = "Actualizar Postulación";
+  };
+
+  request.onerror = function () {
+    console.error("Error al cargar la postulación para editar:", request.error);
+  };
+};
+
+const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
+  let transaction = db.transaction("postulaciones", "readwrite");
+  let store = transaction.objectStore("postulaciones");
+
+  let request = store.put({ id, cargo, empresa, fecha, nota });
+
+  request.onsuccess = function () {
+    console.log("Postulación actualizada exitosamente");
+    obtenerPostulaciones();
+    limpiarFormulario();
+    idEditar = null;
+    btnGuardar.textContent = "Guardar Postulación";
+  };
+
+  request.onerror = function () {
+    console.error("Error al actualizar la postulación:", request.error);
+  };
+};
+
 const eliminarPostulacion = (id) => {
   let transaction = db.transaction("postulaciones", "readwrite");
   let store = transaction.objectStore("postulaciones");

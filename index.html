@@ -17,6 +17,7 @@
       crossorigin="anonymous"
     ></script>
     <script defer src="./assets/js/main.js"></script>
+    <script defer src="./assets/js/filtro.js"></script>
   </head>
   <body>
     <div>
@@ -51,9 +52,34 @@
           </button>
         </form>
       </div>
+      <div class="container border p-2 w-50 border-2 border-black d-flex flex-row">
+        <div class="container d-flex">
+          <input
+            class="form-control"
+            type="text"
+            id="buscarEmpresa"
+            placeholder="Buscar por empresa"
+          />
+          <button class="btn btn-primary" id="btnBuscarEmpresa">Buscar</button>
+        </div>
+
+        <div class="container d-flex">
+          <select id="ordenFecha" class="form-select">
+            <option value="asc">Fecha más antigua</option>
+            <option value="desc">Fecha más reciente</option>
+          </select>
+          <button class="btn btn-primary" id="btnOrdenarFecha">
+            Ordenar
+          </button>
+        </div>
+      </div>
+
       <div class="container">
         <h2 class="text-center mt-4">Listado de Postulaciones</h2>
-        <ul class="list-group d-flex justify-content-center align-items-center" id="postulaciones"></ul>
+        <ul
+          class="list-group d-flex justify-content-center align-items-center"
+          id="postulaciones"
+        ></ul>
       </div>
     </div>
   </body>

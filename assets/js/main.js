@@ -120,6 +120,7 @@ const renderizarPostulaciones = (postulaciones) => {
 };
 
 const editarPostulacion = (id) => {
+  location.replace("#inicio");
   let transaction = db.transaction("postulaciones", "readonly");
   let store = transaction.objectStore("postulaciones");
 

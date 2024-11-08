@@ -161,19 +161,22 @@ const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
 };
 
 const eliminarPostulacion = (id) => {
-  let transaction = db.transaction("postulaciones", "readwrite");
-  let store = transaction.objectStore("postulaciones");
-
-  let request = store.delete(id);
-
-  request.onsuccess = function () {
-    console.log("Postulación eliminada exitosamente");
-    obtenerPostulaciones();
-  };
-
-  request.onerror = function () {
-    console.error("Error al eliminar la postulación:", request.error);
-  };
+  if (confirm("¿Seguro quieres eliminar la postulación?")) {
+    let transaction = db.transaction("postulaciones", "readwrite");
+    let store = transaction.objectStore("postulaciones");
+  
+    let request = store.delete(id);
+  
+    request.onsuccess = function () {
+      console.log("Postulación eliminada exitosamente");
+      obtenerPostulaciones();
+    };
+  
+    request.onerror = function () {
+      console.error("Error al eliminar la postulación:", request.error);
+    };
+    alert("Registro Eliminado")
+  }
 };
 
 const limpiarFormulario = () => {

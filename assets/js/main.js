@@ -42,13 +42,13 @@ openRequest.onsuccess = function () {
       alert("Falta rellenar campos");
       return;
     }
-     if (idEditar) {
-       actualizarPostulacion(idEditar, datos);
-       limpiarFormulario();
-     } else {
-       guardarPostulacion(datos);
-       limpiarFormulario();
-     }
+    if (idEditar) {
+      actualizarPostulacion(idEditar, datos);
+      limpiarFormulario();
+    } else {
+      guardarPostulacion(datos);
+      limpiarFormulario();
+    }
   });
 };
 
@@ -142,40 +142,42 @@ const editarPostulacion = (id) => {
 };
 
 const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
-  let transaction = db.transaction("postulaciones", "readwrite");
-  let store = transaction.objectStore("postulaciones");
+  if (confirm("¿Seguro quieres actualizar la postulación?")) {
+    let transaction = db.transaction("postulaciones", "readwrite");
+    let store = transaction.objectStore("postulaciones");
 
-  let request = store.put({ id, cargo, empresa, fecha, nota });
+    let request = store.put({ id, cargo, empresa, fecha, nota });
 
-  request.onsuccess = function () {
-    console.log("Postulación actualizada exitosamente");
-    obtenerPostulaciones();
-    limpiarFormulario();
-    idEditar = null;
-    btnGuardar.textContent = "Guardar Postulación";
-  };
+    request.onsuccess = function () {
+      console.log("Postulación actualizada exitosamente");
+      obtenerPostulaciones();
+      limpiarFormulario();
+      idEditar = null;
+      btnGuardar.textContent = "Guardar Postulación";
+    };
 
-  request.onerror = function () {
-    console.error("Error al actualizar la postulación:", request.error);
-  };
+    request.onerror = function () {
+      console.error("Error al actualizar la postulación:", request.error);
+    };
+  }
 };
 
 const eliminarPostulacion = (id) => {
   if (confirm("¿Seguro quieres eliminar la postulación?")) {
     let transaction = db.transaction("postulaciones", "readwrite");
     let store = transaction.objectStore("postulaciones");
-  
+
     let request = store.delete(id);
-  
+
     request.onsuccess = function () {
       console.log("Postulación eliminada exitosamente");
       obtenerPostulaciones();
     };
-  
+
     request.onerror = function () {
       console.error("Error al eliminar la postulación:", request.error);
     };
-    alert("Registro Eliminado")
+    alert("Registro Eliminado");
   }
 };
 

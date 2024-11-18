@@ -74,7 +74,7 @@ const guardarPostulacion = ({ cargo, empresa, fecha, nota }) => {
 
   request.onsuccess = function () {
     console.log("Postulación guardada exitosamente");
-    obtenerPostulaciones(); // Actualizar la lista de postulaciones en la UI
+    obtenerPostulaciones();
   };
 
   request.onerror = function () {
@@ -103,7 +103,7 @@ const obtenerPostulaciones = () => {
 };
 
 const renderizarPostulaciones = (postulaciones) => {
-  contenedorPostulaciones.innerHTML = ""; // Limpiar el contenedor
+  contenedorPostulaciones.innerHTML = "";
   postulaciones.forEach((postulacion) => {
     const div = document.createElement("div");
     div.classList.add("m-4", "w-50");
@@ -142,7 +142,7 @@ const editarPostulacion = (id) => {
 };
 
 const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
-  if (confirm("¿Seguro quieres actualizar la postulación?")) {
+  if (confirm("¿Seguro quieres actualizar la postulación? No podrás revertir los cambios")) {
     let transaction = db.transaction("postulaciones", "readwrite");
     let store = transaction.objectStore("postulaciones");
 
@@ -159,11 +159,12 @@ const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
     request.onerror = function () {
       console.error("Error al actualizar la postulación:", request.error);
     };
+    alert("Registro Actualizado");
   }
 };
 
 const eliminarPostulacion = (id) => {
-  if (confirm("¿Seguro quieres eliminar la postulación?")) {
+  if (confirm("¿Seguro quieres eliminar la postulación? No podrás recuperar los datos")) {
     let transaction = db.transaction("postulaciones", "readwrite");
     let store = transaction.objectStore("postulaciones");
 

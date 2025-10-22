@@ -59,7 +59,7 @@ openRequest.onerror = function () {
   console.error("Error al abrir la base de datos:", openRequest.error);
 };
 
-const guardarPostulacion = ({ cargo, empresa, fecha, nota }) => {
+const guardarPostulacion = ({ cargo, empresa, fecha, plataforma, nota }) => {
   if (!db) {
     console.error("La base de datos no está lista");
     return;

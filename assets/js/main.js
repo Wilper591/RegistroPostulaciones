@@ -1,8 +1,8 @@
 const inputCargo = document.querySelector("#cargo");
 const inputEmpresa = document.querySelector("#empresa");
 const inputFecha = document.querySelector("#fecha");
-const inputNota = document.querySelector("#nota");
 const inputPlataforma = document.querySelector("#plataforma");
+const inputNota = document.querySelector("#nota");
 const btnGuardar = document.querySelector("#guardar");
 const contenedorPostulaciones = document.querySelector("#postulaciones");
 
@@ -147,7 +147,7 @@ const editarPostulacion = (id) => {
   };
 };
 
-const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
+const actualizarPostulacion = (id, { cargo, empresa, fecha, plataforma, nota }) => {
   if (confirm("¿Seguro quieres actualizar la postulación? No podrás revertir los cambios")) {
     let transaction = db.transaction("postulaciones", "readwrite");
     let store = transaction.objectStore("postulaciones");

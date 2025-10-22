@@ -2,6 +2,7 @@ const inputCargo = document.querySelector("#cargo");
 const inputEmpresa = document.querySelector("#empresa");
 const inputFecha = document.querySelector("#fecha");
 const inputNota = document.querySelector("#nota");
+const inputPlataforma = document.querySelector("#plataforma");
 const btnGuardar = document.querySelector("#guardar");
 const contenedorPostulaciones = document.querySelector("#postulaciones");
 
@@ -30,6 +31,7 @@ openRequest.onsuccess = function () {
       cargo: inputCargo.value,
       empresa: inputEmpresa.value,
       fecha: inputFecha.value,
+      plataforma: inputPlataforma.value,
       nota: inputNota.value,
     };
 
@@ -37,6 +39,7 @@ openRequest.onsuccess = function () {
       datos.cargo === "" ||
       datos.empresa === "" ||
       datos.fecha === "" ||
+      datos.plataforma === "" ||
       datos.nota === ""
     ) {
       alert("Falta rellenar campos");
@@ -69,6 +72,7 @@ const guardarPostulacion = ({ cargo, empresa, fecha, nota }) => {
     cargo,
     empresa,
     fecha,
+    plataforma,
     nota,
   });
 
@@ -111,6 +115,7 @@ const renderizarPostulaciones = (postulaciones) => {
                     <li class="list-group-item rounded"><strong>Cargo:</strong> ${postulacion.cargo}</li>
                     <li class="list-group-item rounded"><strong>Empresa:</strong> ${postulacion.empresa}</li>
                     <li class="list-group-item rounded"><strong>Fecha:</strong> ${postulacion.fecha}</li>
+                    <li class="list-group-item rounded"><strong>Plataforma:</strong> ${postulacion.plataforma}</li>
                     <li class="list-group-item rounded"><strong>Nota:</strong> ${postulacion.nota}</li>
                     <button class="btn btn-danger my-2" onclick="eliminarPostulacion(${postulacion.id})">Eliminar</button>
                     <button class="btn btn-secondary my-2" onclick="editarPostulacion(${postulacion.id})">Editar</button>
@@ -131,6 +136,7 @@ const editarPostulacion = (id) => {
     inputCargo.value = postulacion.cargo;
     inputEmpresa.value = postulacion.empresa;
     inputFecha.value = postulacion.fecha;
+    inputPlataforma.value = postulacion.plataforma;
     inputNota.value = postulacion.nota;
     idEditar = postulacion.id;
     btnGuardar.textContent = "Actualizar Postulación";
@@ -146,7 +152,7 @@ const actualizarPostulacion = (id, { cargo, empresa, fecha, nota }) => {
     let transaction = db.transaction("postulaciones", "readwrite");
     let store = transaction.objectStore("postulaciones");
 
-    let request = store.put({ id, cargo, empresa, fecha, nota });
+    let request = store.put({ id, cargo, empresa, fecha, plataforma, nota });
 
     request.onsuccess = function () {
       console.log("Postulación actualizada exitosamente");
@@ -186,6 +192,7 @@ const limpiarFormulario = () => {
   inputCargo.value = "";
   inputEmpresa.value = "";
   inputFecha.value = "";
+  inputPlataforma.value = "";
   inputNota.value = "";
   return;
 };
